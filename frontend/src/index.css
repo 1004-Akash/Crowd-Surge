@@ -1,0 +1,267 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    @apply antialiased scroll-smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans text-base;
+    letter-spacing: -0.011em;
+  }
+
+  ::selection {
+    @apply bg-accent/30 text-foreground;
+  }
+
+  /* Typography */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display tracking-tight;
+  }
+
+  /* Premium Scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-foreground/10 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-foreground/20;
+  }
+}
+
+@layer components {
+
+  /* Card System */
+  .card {
+    @apply bg-background-secondary border border-border rounded-xl shadow-card transition-all duration-200 ease-smooth;
+  }
+
+  .card:hover {
+    @apply shadow-card-hover border-border-hover;
+  }
+
+  .card-interactive {
+    @apply card cursor-pointer;
+  }
+
+  .card-interactive:hover {
+    @apply -translate-y-0.5;
+  }
+
+  /* Glass Card */
+  .glass {
+    @apply bg-background-secondary/60 backdrop-blur-xl border border-white/[0.04] rounded-xl shadow-lg;
+  }
+
+  /* Section Headers */
+  .section-title {
+    @apply text-sm font-semibold text-foreground-muted uppercase tracking-wider;
+  }
+
+  /* Button System */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 font-medium rounded-lg transition-all duration-150 ease-smooth focus:outline-none focus:ring-2 focus:ring-accent/30 focus:ring-offset-2 focus:ring-offset-background disabled:opacity-50 disabled:pointer-events-none;
+  }
+
+  .btn-primary {
+    @apply btn px-4 py-2.5 bg-accent text-background hover:bg-accent-hover active:scale-[0.98] shadow-md shadow-accent/20;
+  }
+
+  .btn-secondary {
+    @apply btn px-4 py-2.5 bg-background-tertiary border border-border text-foreground hover:bg-background-elevated hover:border-border-hover active:scale-[0.98];
+  }
+
+  .btn-ghost {
+    @apply btn px-4 py-2.5 text-foreground-secondary hover:text-foreground hover:bg-background-tertiary;
+  }
+
+  .btn-icon {
+    @apply btn p-2.5 text-foreground-muted hover:text-foreground hover:bg-background-tertiary rounded-lg;
+  }
+
+  .btn-sm {
+    @apply text-sm px-3 py-1.5;
+  }
+
+  .btn-lg {
+    @apply text-base px-6 py-3;
+  }
+
+  /* Input System */
+  .input {
+    @apply w-full px-3.5 py-2.5 bg-background-tertiary/50 border border-border text-foreground placeholder-foreground-muted rounded-lg outline-none transition-all duration-150 ease-smooth;
+  }
+
+  .input:focus {
+    @apply border-accent ring-2 ring-accent/15 bg-background-tertiary;
+  }
+
+  .input-lg {
+    @apply px-4 py-3 text-base;
+  }
+
+  /* Badge System */
+  .badge {
+    @apply inline-flex items-center gap-1 px-2 py-0.5 text-xs font-semibold rounded-md;
+  }
+
+  .badge-default {
+    @apply bg-background-tertiary text-foreground-secondary border border-border;
+  }
+
+  .badge-accent {
+    @apply bg-accent/10 text-accent border border-accent/20;
+  }
+
+  .badge-success {
+    @apply bg-success/10 text-success border border-success/20;
+  }
+
+  .badge-warning {
+    @apply bg-warning/10 text-warning border border-warning/20;
+  }
+
+  .badge-danger {
+    @apply bg-danger/10 text-danger border border-danger/20;
+  }
+
+  /* Status Dots */
+  .status-dot {
+    @apply w-2 h-2 rounded-full;
+  }
+
+  .status-dot-success {
+    @apply bg-success shadow-glow-success;
+  }
+
+  .status-dot-warning {
+    @apply bg-warning;
+  }
+
+  .status-dot-danger {
+    @apply bg-danger shadow-glow-danger animate-pulse-soft;
+  }
+
+  /* Stat Cards */
+  .stat-card {
+    @apply card p-5 relative overflow-hidden;
+  }
+
+  .stat-value {
+    @apply text-3xl font-bold tracking-tight;
+  }
+
+  .stat-label {
+    @apply text-sm text-foreground-muted;
+  }
+
+  /* Progress */
+  .progress-track {
+    @apply h-1.5 bg-background-tertiary rounded-full overflow-hidden;
+  }
+
+  .progress-fill {
+    @apply h-full rounded-full transition-all duration-500 ease-out;
+  }
+
+  /* Divider */
+  .divider {
+    @apply h-px bg-border;
+  }
+
+  /* Avatar */
+  .avatar {
+    @apply rounded-full bg-gradient-to-br from-accent to-purple flex items-center justify-center text-white font-semibold;
+  }
+
+  .avatar-sm {
+    @apply w-8 h-8 text-xs;
+  }
+
+  .avatar-md {
+    @apply w-10 h-10 text-sm;
+  }
+
+  .avatar-lg {
+    @apply w-12 h-12 text-base;
+  }
+
+  /* Skeleton Loading */
+  .skeleton {
+    @apply bg-background-tertiary animate-pulse rounded;
+  }
+
+  /* Table */
+  .table-row {
+    @apply border-b border-border last:border-0 transition-colors;
+  }
+
+  .table-row:hover {
+    @apply bg-background-tertiary/30;
+  }
+
+  .table-cell {
+    @apply px-4 py-3.5 text-sm;
+  }
+
+  .table-header {
+    @apply px-4 py-3 text-xs font-semibold text-foreground-muted uppercase tracking-wider bg-background-tertiary/30;
+  }
+}
+
+@layer utilities {
+
+  /* Text */
+  .text-gradient {
+    @apply bg-gradient-to-r from-accent via-purple to-accent bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient-shift;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Glow Effects */
+  .glow {
+    @apply shadow-glow;
+  }
+
+  .glow-sm {
+    @apply shadow-glow-sm;
+  }
+
+  /* Hide scrollbar */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  /* Focus ring */
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-accent/40 focus:ring-offset-2 focus:ring-offset-background;
+  }
+}
