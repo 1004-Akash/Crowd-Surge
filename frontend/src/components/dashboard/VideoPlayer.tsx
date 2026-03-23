@@ -8,9 +8,10 @@ interface VideoPlayerProps {
     isSimulation?: boolean;
     isHeatmapOn?: boolean;
     onToggleHeatmap?: (value: boolean) => void;
+    canToggleHeatmap?: boolean;
 }
 
-const VideoPlayer = ({ image, isConnected, isSimulation = false, isHeatmapOn = true, onToggleHeatmap }: VideoPlayerProps) => {
+const VideoPlayer = ({ image, isConnected, isSimulation = false, isHeatmapOn = true, onToggleHeatmap, canToggleHeatmap = true }: VideoPlayerProps) => {
     const [isMaximized, setIsMaximized] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -39,10 +40,12 @@ const VideoPlayer = ({ image, isConnected, isSimulation = false, isHeatmapOn = t
                 <div className="flex items-center gap-1">
                     <button
                         onClick={handleToggle}
+                        disabled={!canToggleHeatmap}
+                        title={!canToggleHeatmap ? "Administrator privileges required" : ""}
                         className={`btn btn-sm px-3 py-1.5 text-xs ${isHeatmapOn
                             ? 'bg-accent/10 text-accent border border-accent/20 hover:bg-accent/20'
                             : 'bg-background-tertiary text-foreground-muted hover:text-foreground border border-border'
-                            }`}
+                            } ${!canToggleHeatmap ? 'opacity-50 cursor-not-allowed' : ''}`}
                     >
                         <Sparkles className="w-3.5 h-3.5" />
                         Heatmap

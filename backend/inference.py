@@ -48,17 +48,37 @@ class CrowdCounter:
         count = 0
         
         if self.simulation_mode:
-            # Simulation Logic
+            # Simulation Logic: Extreme high counts to test thresholds
+            # 70% low (SAFE), 20% warning (100k+), 10% critical (500k+)
+            scenario = np.random.random()
+            
+            if scenario > 0.95:
+                # Extreme (1M+)
+                count = np.random.uniform(1000000, 1500000)
+            elif scenario > 0.85:
+                # Critical (500k+)
+                count = np.random.uniform(550000, 950000)
+            elif scenario > 0.70:
+                # Warning (100k+)
+                count = np.random.uniform(120000, 480000)
+            else:
+                # Normal (Low)
+                count = np.random.uniform(50, 5000)
+
+            # Generate a matching density map for visualization
             h, w = target_h // 8, target_w // 8
             density_map = np.zeros((h, w), dtype=np.float32)
-            # Add random blobs
-            for _ in range(5):
+            # Normalize blobs to sum up to "count"
+            for _ in range(8):
                 cx, cy = np.random.randint(0, w), np.random.randint(0, h)
-                sigma = 3
+                sigma = 2.5
                 y, x = np.ogrid[-cy:h-cy, -cx:w-cx]
                 blob = np.exp(-(x*x + y*y) / (2*sigma*sigma))
-                density_map += blob * np.random.uniform(5, 10)
-            count = np.sum(density_map) 
+                density_map += blob
+            
+            current_sum = np.sum(density_map)
+            if current_sum > 0:
+                density_map = density_map * (count / current_sum)
         else:
             # 2. Preprocessing
             frame_norm = frame_resized.astype(np.float32)

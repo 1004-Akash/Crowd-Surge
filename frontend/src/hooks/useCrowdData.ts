@@ -14,7 +14,7 @@ export interface CrowdData {
     heatmap_on: boolean;
 }
 
-export const useCrowdData = (url: string) => {
+export const useCrowdData = (url: string, token: string | null) => {
     const [data, setData] = useState<CrowdData | null>(null);
     const [isConnected, setIsConnected] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -29,12 +29,19 @@ export const useCrowdData = (url: string) => {
     }, []);
 
     useEffect(() => {
+        if (!token) {
+            setIsConnected(false);
+            return;
+        }
+
         let ws: WebSocket | null = null;
         let reconnectTimeout: number | undefined;
 
         const connect = () => {
             try {
-                ws = new WebSocket(url);
+                // Pass token as query parameter
+                const fullUrl = `${url}?token=${token}`;
+                ws = new WebSocket(fullUrl);
 
                 ws.onopen = () => {
                     console.log('Connected to CrowdSafe Backend');
@@ -45,6 +52,10 @@ export const useCrowdData = (url: string) => {
                 ws.onmessage = (event) => {
                     try {
                         const parsedData = JSON.parse(event.data);
+                        if (parsedData.error) {
+                            console.error('Backend Error:', parsedData.message || parsedData.error);
+                            return;
+                        }
                         setData({
                             timestamp: parsedData.timestamp,
                             count: parsedData.count,
@@ -59,11 +70,16 @@ export const useCrowdData = (url: string) => {
                     }
                 };
 
-                ws.onclose = () => {
-                    console.log('Disconnected from Backend');
+                ws.onclose = (event) => {
+                    console.log('Disconnected from Backend', event.code);
                     setIsConnected(false);
-                    // Attempt reconnect
-                    reconnectTimeout = setTimeout(connect, 3000);
+                    
+                    // If closed due to policy violation (invalid token), don't reconnect
+                    if (event.code !== 1008) {
+                        reconnectTimeout = setTimeout(connect, 3000);
+                    } else {
+                        setError('Session expired or unauthorized');
+                    }
                 };
 
                 ws.onerror = (err) => {
@@ -92,7 +108,7 @@ export const useCrowdData = (url: string) => {
                 clearTimeout(reconnectTimeout);
             }
         };
-    }, [url]);
+    }, [url, token]);
 
     return { data, isConnected, error, sendMessage };
 };

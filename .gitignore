@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Node.js
+node_modules/
+dist/
+.env
+
+# Data and Artifacts
+backend/data/*.pdf
+backend/data/*.txt
+data/training_performance.png
+# Keep weights.h5 (65MB) for now if the user needs it
+
+# Logs
+*.log
